@@ -20,3 +20,9 @@ gleam add cgi
 ```
 
 and its documentation can be found at <https://hexdocs.pm/cgi>.
+
+Thank you to Steven vanZyl for [plug_cgi][1], which was used as a
+reference. Why is there so little information on the CGI protcol online
+these days?
+
+[1]: https://github.com/rushsteve1/plug_cgi

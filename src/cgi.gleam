@@ -81,7 +81,8 @@ pub fn load_request() -> Request(BitArray) {
       case pair.0 {
         "CONTENT_TYPE" -> Ok(#("content-type", pair.1))
         "CONTENT_LENGTH" -> Ok(#("content-length", pair.1))
-        "HTTP_" <> name -> Ok(#(string.lowercase(name), pair.1))
+        "HTTP_" <> name ->
+          Ok(#(string.replace(string.lowercase(name), "_", "-"), pair.1))
         _ -> Error(Nil)
       }
     })

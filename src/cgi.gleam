@@ -20,8 +20,10 @@ pub type RequestError {
   MissingEnvironmentVariable(name: String)
 }
 
+// TODO: Remove
 pub fn main() {
   let request = load_request()
+  use request <- read_body_callback(request)
   let body = "Hello! You send me this request:\n\n" <> string.inspect(request)
   let response = Response(201, [#("content-type", "text/plain")], body)
   send_response(response)
@@ -87,7 +89,6 @@ pub fn load_request() -> Request(BitArray) {
       }
     })
 
-  // TODO: decide what to do RE the body.
   let body = <<>>
 
   Request(
@@ -100,6 +101,42 @@ pub fn load_request() -> Request(BitArray) {
     path: path,
     query: query,
   )
+}
+
+// TODO: document
+// TODO: test
+pub fn read_body(request: Request(BitArray)) -> Request(BitArray) {
+  let body = read_body_sync(request_content_length(request))
+  Request(..request, body: body)
+}
+
+fn request_content_length(request: Request(BitArray)) -> Int {
+  request
+  |> request.get_header("content-length")
+  |> result.try(int.parse)
+  |> result.unwrap(0)
+}
+
+@external(erlang, "cgi_ffi", "read_body_sync")
+@external(javascript, "./cgi_ffi.mjs", "read_body_sync")
+fn read_body_sync(length: Int) -> BitArray
+
+// TODO: document
+// TODO: test
+pub fn read_body_callback(
+  request: Request(BitArray),
+  handle: fn(Request(BitArray)) -> anything,
+) -> Nil {
+  read_body_async(request_content_length(request), fn(body) {
+    handle(Request(..request, body: body))
+  })
+}
+
+@external(javascript, "./cgi_ffi.mjs", "read_body_async")
+fn read_body_async(length: Int, handle: fn(BitArray) -> anything) -> Nil {
+  let body = read_body_sync(length)
+  handle(body)
+  Nil
 }
 
 fn status_phrase(status: Int) -> String {

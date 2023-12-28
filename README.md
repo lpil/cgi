@@ -25,8 +25,11 @@ pub fn main() {
 }
 ```
 
-You may wish to [compile your Gleam program to an escript](https://github.com/lpil/gleescript)
-to be run by your CGI server.
+For your CGI server to run your program you may wish to [compile your Gleam
+program to an escript][gleescript] if using the Erlang target, or bundling it
+into a single JavaScript file if using the JavaScript target.
+
+[gleescript]: https://github.com/lpil/gleescript
 
 Further documentation can be found at <https://hexdocs.pm/cgi>.
 

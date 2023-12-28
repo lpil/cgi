@@ -1,16 +1,15 @@
 name = "cgi"
 version = "1.0.0"
-
-# Fill out these fields if you intend to generate HTML documentation or publish
-# your project to the Hex package manager.
-#
-# description = ""
-# licences = ["Apache-2.0"]
-# repository = { type = "github", user = "username", repo = "project" }
-# links = [{ title = "Website", href = "https://gleam.run" }]
+description = "Common Gateway Interface (CGI) in Gleam"
+licences = ["Apache-2.0"]
+repository = { type = "github", user = "lpil", repo = "cgi" }
+links = [
+  { title = "Website", href = "https://gleam.run" },
+  { title = "Sponsor", href = "https://github.com/sponsors/lpil" },
+]
 
 [dependencies]
-gleam_stdlib = "~> 0.32"
+gleam_stdlib = "~> 0.32 or ~> 1.0"
 gleam_http = "~> 3.5"
 envoy = "~> 1.0"
 

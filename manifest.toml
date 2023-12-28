@@ -11,5 +11,5 @@ packages = [
 [requirements]
 envoy = { version = "~> 1.0" }
 gleam_http = { version = "~> 3.5" }
-gleam_stdlib = { version = "~> 0.32" }
+gleam_stdlib = { version = "~> 0.32 or ~> 1.0" }
 gleeunit = { version = "~> 1.0" }

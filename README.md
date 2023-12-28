@@ -10,6 +10,9 @@ good choice. As CGI programs only run when there is a request to handle they do
 not use any system resources when there is no traffic. This makes them very
 efficient for low traffic websites.
 
+It also make deployment really simple! Just copy the new version of the
+compiled CGI program onto the server and it'll be used for future requests.
+
 ```sh
 gleam add cgi
 ```

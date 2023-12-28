@@ -16,6 +16,7 @@ gleam add cgi
 ```gleam
 import cgi
 import gleam/string
+import gleam/http/response.{Response}
 
 pub fn main() {
   use request <- cgi.handle_request

@@ -22,15 +22,22 @@ pub type RequestError {
 
 // TODO: Remove
 pub fn main() {
-  let request = load_request()
-  use request <- read_body_callback(request)
+  use request <- handle_request
   let body = "Hello! You send me this request:\n\n" <> string.inspect(request)
-  let response = Response(201, [#("content-type", "text/plain")], body)
-  send_response(response)
+  Response(201, [#("content-type", "text/plain")], body)
 }
 
-// TODO: document
-// TODO: test
+/// Load a GCI HTTP request and dispatch a response.
+///
+/// CGI works over stdin and stdout, so be sure your code does not use them for
+/// this will likely cause the program to fail.
+///
+pub fn handle_request(f: fn(Request(BitArray)) -> Response(String)) -> Nil {
+  with_request_body(load_request(), f)
+}
+
+/// Send a CGI HTTP response by printing it to stdout.
+///
 pub fn send_response(response: Response(String)) -> Nil {
   let s = response.status
   io.println("status: " <> int.to_string(s) <> " " <> status_phrase(s))
@@ -45,8 +52,11 @@ pub fn send_response(response: Response(String)) -> Nil {
   io.println(response.body)
 }
 
-// TODO: document
-// TODO: test
+/// Load a CGI HTTP request from the environment.
+///
+/// The body of the request is not loaded. Use `read_body` or
+/// `with_request_body` to load the body into the request.
+///
 pub fn load_request() -> Request(BitArray) {
   let env = envoy.all()
 
@@ -103,8 +113,12 @@ pub fn load_request() -> Request(BitArray) {
   )
 }
 
-// TODO: document
-// TODO: test
+/// Load the body of a request from stdin.
+///
+/// Due to how IO works in JavaScript may not always work on JavaScript,
+/// especially if the body ir larger or on Windows. Consider using the
+/// `with_request_body` function instead, which works on all platforms.
+///
 pub fn read_body(request: Request(BitArray)) -> Request(BitArray) {
   let body = read_body_sync(request_content_length(request))
   Request(..request, body: body)
@@ -121,9 +135,10 @@ fn request_content_length(request: Request(BitArray)) -> Int {
 @external(javascript, "./cgi_ffi.mjs", "read_body_sync")
 fn read_body_sync(length: Int) -> BitArray
 
-// TODO: document
-// TODO: test
-pub fn read_body_callback(
+/// Load the body of a request from stdin, running a callback with the
+/// response with the body.
+///
+pub fn with_request_body(
   request: Request(BitArray),
   handle: fn(Request(BitArray)) -> anything,
 ) -> Nil {

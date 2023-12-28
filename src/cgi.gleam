@@ -16,10 +16,6 @@ import gleam/http
 import gleam/http/request.{type Request, Request}
 import gleam/http/response.{type Response, Response}
 
-pub type RequestError {
-  MissingEnvironmentVariable(name: String)
-}
-
 // TODO: Remove
 pub fn main() {
   use request <- handle_request

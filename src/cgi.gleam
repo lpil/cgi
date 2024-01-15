@@ -23,13 +23,15 @@ pub fn main() {
   Response(201, [#("content-type", "text/plain")], body)
 }
 
-/// Load a GCI HTTP request and dispatch a response.
+/// Load a CGI HTTP request and dispatch a response.
 ///
 /// CGI works over stdin and stdout, so be sure your code does not use them for
 /// this will likely cause the program to fail.
 ///
 pub fn handle_request(f: fn(Request(BitArray)) -> Response(String)) -> Nil {
-  with_request_body(load_request(), f)
+  use request <- with_request_body(load_request())
+  f(request)
+  |> send_response
 }
 
 /// Send a CGI HTTP response by printing it to stdout.

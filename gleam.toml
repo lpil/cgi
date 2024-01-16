@@ -1,5 +1,5 @@
 name = "cgi"
-version = "1.0.0"
+version = "1.0.1"
 description = "Common Gateway Interface (CGI) in Gleam"
 licences = ["Apache-2.0"]
 repository = { type = "github", user = "lpil", repo = "cgi" }

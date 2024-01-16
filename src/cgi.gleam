@@ -16,13 +16,6 @@ import gleam/http
 import gleam/http/request.{type Request, Request}
 import gleam/http/response.{type Response, Response}
 
-// TODO: Remove
-pub fn main() {
-  use request <- handle_request
-  let body = "Hello! You send me this request:\n\n" <> string.inspect(request)
-  Response(201, [#("content-type", "text/plain")], body)
-}
-
 /// Load a CGI HTTP request and dispatch a response.
 ///
 /// CGI works over stdin and stdout, so be sure your code does not use them for
